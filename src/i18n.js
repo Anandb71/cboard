@@ -61,8 +61,14 @@ export function standardizeLanguageCode(lang) {
 }
 
 export function getDefaultLang(langs) {
+  const deviceLang = normalizeLanguageCode(window.navigator.language);
+  // Prefer the exact device locale (e.g. pt-PT) over the first region
+  // listed for the same language (e.g. pt-BR).
+  if (langs.includes(deviceLang)) {
+    return deviceLang;
+  }
   for (let i = 0; i < langs.length; i++) {
-    if (window.navigator.language.slice(0, 2) === langs[i].slice(0, 2)) {
+    if (deviceLang.slice(0, 2) === langs[i].slice(0, 2)) {
       return langs[i];
     }
   }
